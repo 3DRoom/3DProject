@@ -32,6 +32,7 @@ public class Main extends Application {
 	
 	double centerX;
 	double centerY;
+	double centerZ;
         
 	Image brick = new Image("/application/Brick.jpg");
 	Image floorP = new Image("/application/Floor.jpg");
@@ -124,6 +125,23 @@ public class Main extends Application {
 	                	box.getTransforms().add(new Rotate(-5, Rotate.Y_AXIS));
         				System.out.println("Key Pressed: " + ke.getCode());
 	            	break;
+	            	// Strafing Left
+	                case Q:
+	                	camera.getTransforms().addAll(
+	                				translate = new Translate(-10, centerY, centerZ)
+	                			);
+	                		System.out.println("Key Presed: " + ke.getCode() + translate.toString());
+	            	break;
+	            	
+	            	// Strafing Right
+	                case E:
+	                	camera.getTransforms().addAll(
+	                				translate = new Translate(10, centerY, centerZ)
+	                			);
+	                		System.out.println("Key Presed: " + ke.getCode() + translate.toString());
+	            	break;
+	            	
+	            	
 	                // Camera rotation around Z Axis
 	                case NUMPAD1:
 	                	rotateZ = new Rotate(-1, Rotate.Z_AXIS);
@@ -132,19 +150,19 @@ public class Main extends Application {
         			break;
         			
 	                case NUMPAD3:
-	                	rotateZ = new Rotate(1, Rotate.Z_AXIS);
+	                	rotateZ = new Rotate(2, Rotate.Z_AXIS);
 	                	camera.getTransforms().add(rotateZ);
         				System.out.println("Key Pressed: " + ke.getCode() + rotateZ);
         			break;
         			// Camera rotation Y Axis
 	                case A:
-	                	rotateY = new Rotate(-1, Rotate.Y_AXIS);
+	                	rotateY = new Rotate(-2, Rotate.Y_AXIS);
 	                	camera.getTransforms().add(rotateY);
         				System.out.println("Key Pressed: " + ke.getCode() + rotateY);
         			break;
         			
 	                case D:
-	                	rotateY = new Rotate(1, Rotate.Y_AXIS);
+	                	rotateY = new Rotate(3, Rotate.Y_AXIS);
 	                	camera.getTransforms().add(rotateY);
         				System.out.println("Key Pressed: " + ke.getCode() + rotateY);
         			break;
