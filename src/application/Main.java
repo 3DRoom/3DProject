@@ -22,7 +22,12 @@ import javafx.stage.StageStyle;
 
 
 public class Main extends Application {
-	
+	/*
+	 * 
+	 * This is a committed version of my code
+	 * Trying to fix latches error with ANTs
+	 * 
+	 */
 	double anchorY;
 	double anchorX;
 	double anchorAngle;
