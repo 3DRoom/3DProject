@@ -1,8 +1,13 @@
 package application;
 	
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -15,10 +20,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 
 public class Main extends Application {
@@ -38,6 +45,9 @@ public class Main extends Application {
 	Image doorPic = new Image("/application/Door.jpg");
 	Image wallPic = new Image("/application/wallpaper.jpg");
 	Image ceilingPic = new Image("/application/ceiling.jpg");
+	Image soccer = new Image("/application/soccer1.jpg");
+	Image soccerSpec = new Image("/application/soccerSpecMap.jpg");
+
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -61,6 +71,7 @@ public class Main extends Application {
 			
 		    camera.setNearClip(0.1);
 			camera.setFarClip(2000.0);
+			//Camera traslation for starting point
 			camera.setTranslateZ(-350);
 			camera.setTranslateX(100);
 			//camera.setFieldOfView(35);
@@ -84,10 +95,11 @@ public class Main extends Application {
 			Box rightcornerwall = new Box(200, 100, 200);
 			Box rightfrontwall = new Box(230, 100, 100);
 			Box rightwall = new Box(50, 100, 500);
+			Sphere soccerBall = new Sphere(10);
 			
-			box.setTranslateX(centerX);
-			box.setTranslateY(centerY);
-			box.setTranslateZ(99);
+			box.setTranslateX(centerX);			soccerBall.setTranslateX(centerX-100);
+			box.setTranslateY(centerY);			soccerBall.setTranslateY(centerY+38);
+			box.setTranslateZ(99);				soccerBall.setTranslateZ(280);
 			
 			box2.setTranslateX(centerX + 200);
 			box2.setTranslateY(centerY);
@@ -175,7 +187,7 @@ public class Main extends Application {
 					break;
 					// Rotation around Y Axis
 	                case LEFT:
-	                	door.getTransforms().add(new Rotate(5, Rotate.Y_AXIS));
+	                	//door.getTransforms().add(new Rotate(5, centerX+50, 0, 0, Rotate.Y_AXIS));
         				System.out.println("Key Pressed: " + ke.getCode());
 	            	break;
 	            	
@@ -218,6 +230,26 @@ public class Main extends Application {
 	                	System.out.println("Key Pressed: " + ke.getCode());
         			break;
         			
+	                case P:
+	                	Timeline timeline = new Timeline(new KeyFrame(
+	                	        Duration.millis(50),
+	                	        ae -> door.getTransforms().add
+	                	        (new Rotate(1, centerX+50, 0, 0, Rotate.Y_AXIS))));
+	                	timeline.setCycleCount(88);
+	                	timeline.play();
+	                	System.out.println(timeline.getCycleCount());
+        			break;
+        			
+	                case O:
+	                	Timeline timeline2 = new Timeline(new KeyFrame(
+	                	        Duration.millis(50),
+	                	        ae -> soccerBall.getTransforms().addAll
+	                	        (new Rotate(5, Rotate.Z_AXIS))));
+	                	timeline2.setCycleCount(88);
+	                	timeline2.play();
+	                	System.out.println(timeline2.getCycleCount());
+        			break;
+        			
 	            	// Exit the Application	
 	                case ESCAPE:	primaryStage.close();
 					default:
@@ -234,6 +266,7 @@ public class Main extends Application {
 			PhongMaterial doorMaterial = new PhongMaterial();
 			PhongMaterial wallMaterial = new PhongMaterial();
 			PhongMaterial ceilingMaterial = new PhongMaterial();
+			PhongMaterial soccerBallMaterial = new PhongMaterial();
 			//phong.setDiffuseColor(Color.GREEN);
 		    phong.setSpecularColor(Color.WHITE);
 		    phong.setDiffuseMap(brick);
@@ -262,6 +295,10 @@ public class Main extends Application {
 		    
 		    ceilingMaterial.setDiffuseMap(ceilingPic);
 		    ceiling.setMaterial(ceilingMaterial);
+		    
+		    soccerBall.setMaterial(soccerBallMaterial);
+		    soccerBallMaterial.setDiffuseMap(soccer);
+		    soccerBallMaterial.setSpecularMap(soccerSpec);
 		   
 		    //Light
 //		    PointLight pointLight = new PointLight(Color.WHITE);
@@ -290,7 +327,7 @@ public class Main extends Application {
 			group.getChildren().addAll(box, box2, box3, box4,
 					backwall, leftwall, rightwall, leftcornerwall, rightcornerwall,
 					leftfrontwall, rightfrontwall, ceiling,
-					floor, floor2, floor3, floor4, door, camera, ambLightRight);
+					floor, floor2, floor3, floor4, door, soccerBall, camera, ambLightRight);
 			
 		
 			
