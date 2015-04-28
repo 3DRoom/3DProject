@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
 import javafx.scene.shape.StrokeLineCap;
@@ -47,9 +48,10 @@ public class Main extends Application {
 	Image doorPic = new Image("/application/resources/Door.jpg");
 	Image wallPic = new Image("/application/resources/wallpaper.jpg");
 	Image ceilingPic = new Image("/application/resources/ceiling.jpg");
-	Image ceilingB = new Image("/application/resources/ceilingB.jpg");
 	Image soccer = new Image("/application/resources/soccer1.jpg");
 	Image soccerSpec = new Image("/application/resources/soccerSpecMap.jpg");
+	Image cylinderPic = new Image("/application/resources/cylinder.jpg");
+	
 	String earthDiff = "/application/resources/EarthDiff.jpg";
 	String earthSpec = "/application/resources/EarthSpec.jpg";
 	String earthBump = "/application/resources/EarthNorm.jpg";
@@ -79,7 +81,7 @@ public class Main extends Application {
 			// Camera traslation for starting point
 			camera.setTranslateZ(-350);
 			camera.setTranslateX(100);
-			// camera.setFieldOfView(35);
+			
 			scene.setCamera(camera);
 
 			// BOX
@@ -102,6 +104,7 @@ public class Main extends Application {
 			Box rightwall = new Box(50, 100, 500);
 			Sphere soccerBall = new Sphere(10);
 			Sphere earth = new Sphere(30);
+			Cylinder cylinder = new Cylinder(20, 10);
 			//Line intersecting the globe
 			Line lineEarth = new Line(centerX - 210, centerY+50, centerX - 210, centerY-50);
 			
@@ -172,14 +175,19 @@ public class Main extends Application {
 			rightwall.setTranslateY(centerY);
 			// SoccerBall in the left room
 			soccerBall.setTranslateX(centerX - 100);
-			soccerBall.setTranslateY(centerY + 38);
+			soccerBall.setTranslateY(centerY + 18);
 			soccerBall.setTranslateZ(280);
+			soccerBall.getTransforms().add(new Rotate(-15, Rotate.Y_AXIS));
 			//Globe in the left room
 			earth.setTranslateX(centerX - 210);
 			earth.setTranslateY(centerY);
 			earth.setTranslateZ(280);
 			//Line intersectiong the globe
 			lineEarth.setTranslateZ(280);
+			
+			cylinder.setTranslateX(centerX-100);
+			cylinder.setTranslateY(centerY+40);
+			cylinder.setTranslateZ(280);
 			
 
 			
@@ -214,8 +222,8 @@ public class Main extends Application {
 						break;
 
 					case RIGHT:
-						// box.getTransforms().add(new Rotate(-5,
-						// Rotate.Y_AXIS));
+						 soccerBall.getTransforms().add(new Rotate(-5,
+						 Rotate.Y_AXIS));
 						System.out.println("Key Pressed: " + ke.getCode());
 						break;
 					// Camera rotation around Z Axis
@@ -292,6 +300,7 @@ public class Main extends Application {
 			PhongMaterial ceilingMaterial = new PhongMaterial();
 			PhongMaterial soccerBallMaterial = new PhongMaterial();
 			PhongMaterial earthMaterial = new PhongMaterial();
+			PhongMaterial cylinderMaterial = new PhongMaterial();
 			// phong.setDiffuseColor(Color.GREEN);
 			phong.setSpecularColor(Color.WHITE);
 			phong.setDiffuseMap(brick);
@@ -319,7 +328,6 @@ public class Main extends Application {
 			rightwall.setMaterial(wallMaterial);
 
 			ceilingMaterial.setDiffuseMap(ceilingPic);
-			//ceilingMaterial.setBumpMap(ceilingB);
 			ceiling.setMaterial(ceilingMaterial);
 
 			soccerBallMaterial.setDiffuseMap(soccer);
@@ -339,6 +347,9 @@ public class Main extends Application {
 			lineEarth.setStrokeLineCap(StrokeLineCap.ROUND);
 			lineEarth.setStroke(Color.web("#3e260d"));
 			lineEarth.setStrokeWidth(2.0f);
+			
+			cylinderMaterial.setDiffuseMap(cylinderPic);
+			cylinder.setMaterial(cylinderMaterial);
 
 			// Light
 			// PointLight pointLight = new PointLight(Color.WHITE);
@@ -357,15 +368,12 @@ public class Main extends Application {
 			// //pointLightLeft.setTranslateZ(-200);
 
 			AmbientLight ambLightRight = new AmbientLight(Color.WHITE);
-			// ambLightRight.setTranslateX(centerX + 500);
-			// ambLightRight.setTranslateY(centerY);
-			// pointLightLeft.setTranslateZ(-100);
 
 			// adding stuff to the group
 			group.getChildren().addAll(box, box2, box3, box4, backwall,
 					leftwall, rightwall, leftcornerwall, rightcornerwall,
 					leftfrontwall, rightfrontwall, ceiling, floor, floor2,
-					floor3, floor4, door, soccerBall, earth, lineEarth, camera,
+					floor3, floor4, door, soccerBall, earth, lineEarth, cylinder, camera,
 					ambLightRight);
 
 			// Showing the stage
