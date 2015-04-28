@@ -1,5 +1,8 @@
 package application;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -34,7 +37,7 @@ public class Main extends Application {
 
 	Translate translate;
 	Rotate rotateX, rotateY, rotateZ;
-	Timeline timeline;
+	Timeline timeline, timeline2, timeline3;
 
 	double centerX;
 	double centerY;
@@ -175,7 +178,7 @@ public class Main extends Application {
 			rightwall.setTranslateY(centerY);
 			// SoccerBall in the left room
 			soccerBall.setTranslateX(centerX - 100);
-			soccerBall.setTranslateY(centerY + 18);
+			soccerBall.setTranslateY(centerY + 28);
 			soccerBall.setTranslateZ(280);
 			soccerBall.getTransforms().add(new Rotate(-15, Rotate.Y_AXIS));
 			//Globe in the left room
@@ -186,7 +189,7 @@ public class Main extends Application {
 			lineEarth.setTranslateZ(280);
 			
 			cylinder.setTranslateX(centerX-100);
-			cylinder.setTranslateY(centerY+40);
+			cylinder.setTranslateY(centerY+44);
 			cylinder.setTranslateZ(280);
 			
 
@@ -264,7 +267,7 @@ public class Main extends Application {
 						box.getTransforms().add(new Rotate(5, Rotate.X_AXIS));
 						System.out.println("Key Pressed: " + ke.getCode());
 						break;
-
+						//opens the door
 					case P:
 					    timeline = new Timeline(new KeyFrame(Duration
 								.millis(50), ae -> door.getTransforms()
@@ -274,13 +277,36 @@ public class Main extends Application {
 						timeline.play();
 						System.out.println(timeline.getCycleCount());
 						break;
-
+						//starts spinning the globe indefinitely
 					case O:
 						timeline = new Timeline(new KeyFrame(Duration
 								.millis(20), ae -> earth.getTransforms()
 								.addAll(new Rotate(1, Rotate.Y_AXIS))));
 						timeline.setCycleCount(Animation.INDEFINITE);
 						timeline.play();
+						break;
+						//shoots the ball once
+					case I:
+						timeline = new Timeline(new KeyFrame(Duration
+								.millis(50), ae -> cylinder.setTranslateY(cylinder.getTranslateY()+1)),
+								new KeyFrame(Duration
+								.millis(50), ae ->soccerBall.setTranslateY(soccerBall.getTranslateY()+1)));
+						timeline.setCycleCount(9);
+						timeline.play();
+						timeline2 = new Timeline(new KeyFrame(Duration
+								.millis(20), ae -> cylinder.setTranslateY(cylinder.getTranslateY()-1)),
+								new KeyFrame(Duration
+								.millis(46), ae ->soccerBall.setTranslateY(soccerBall.getTranslateY()-5)));
+						timeline2.setCycleCount(9);
+						timeline2.setDelay(Duration.millis(400));
+						timeline2.play();
+						timeline3 = new Timeline(
+								new KeyFrame(Duration
+								.millis(50), ae ->soccerBall.setTranslateY(soccerBall.getTranslateY()+4)));
+						timeline3.setCycleCount(9);
+						timeline3.setDelay(Duration.millis(860));
+						timeline3.play();
+						System.out.println(cylinder.getTranslateY());
 						break;
 
 					// Exit the Application
@@ -382,7 +408,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
