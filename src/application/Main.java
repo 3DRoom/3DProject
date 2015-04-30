@@ -4,11 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -40,6 +35,16 @@ public class Main extends Application {
 	Translate translate;
 	Rotate rotateX, rotateY, rotateZ;
 	Timeline timeline, timeline2, timeline3;
+	
+	Sphere bouncyball;
+
+	boolean bouncing = false;
+
+	boolean YD = true;
+
+	boolean XD = true;
+
+	boolean ZD = true;
 
 	PerspectiveCamera camera = new PerspectiveCamera(true);
 	
@@ -73,6 +78,8 @@ public class Main extends Application {
 	Image mahoganyPic = new Image("/application/resources/mahoganyPic.jpg");
 	Image marblePic = new Image("/application/resources/marblePic.jpg");
 	Image grassPic = new Image("/application/resources/grassPic.jpg");
+	
+	Image bball = new Image("/application/resources/beachball.jpg");
 	
 	String earthDiff = "/application/resources/EarthDiff.jpg";
 	String earthSpec = "/application/resources/EarthSpec.jpg";
@@ -171,6 +178,13 @@ public class Main extends Application {
 			Box grass1 = new Box(260,1,240);
 			Box grass2 = new Box(260, 1, 260);
 //	Hannah
+			bouncyball = new Sphere(12);
+
+			bouncyball.setTranslateX(centerX+300);
+
+			bouncyball.setTranslateY(centerY+20);
+
+			bouncyball.setTranslateZ(400);
 			
 			box.setTranslateX(centerX);
 			box.setTranslateY(centerY);
@@ -509,6 +523,102 @@ public class Main extends Application {
 	                			);
 	                		System.out.println("Key Presed: " + ke.getCode() + translate.toString());
 	            	break;
+	                case L:
+					    timeline = new Timeline(new KeyFrame(Duration
+								.millis(50), ae -> door.getTransforms()
+								.add(new Rotate(-1, centerX + 50, 0, 0,
+										Rotate.Y_AXIS))));
+						timeline.setCycleCount(88);
+						timeline.play();
+						break;
+	                case G:
+
+	                	bouncyball.setRotationAxis(Rotate.X_AXIS);
+
+	                	if(bouncyball.getTranslateY() < centerY-30){
+
+	                	YD = true;
+
+	                	}
+
+	                	if(bouncyball.getTranslateY() > centerY+30){
+
+	                	YD = false;
+
+	                	}
+
+
+	                	if(bouncyball.getTranslateX() < centerX+250){
+
+	                	XD = true;
+
+
+	                	}
+
+	                	if(bouncyball.getTranslateX() > centerX+400){
+
+	                	XD = false;
+
+
+	                	}
+
+
+	                	if(bouncyball.getTranslateZ() < 190){
+
+	                	ZD = true;
+
+	                	}
+
+	                	if(bouncyball.getTranslateZ() > 600){
+
+	                	ZD = false;
+
+	                	}
+
+
+	                	if(YD){
+
+	                	bouncyball.setTranslateY(bouncyball.getTranslateY()+4);
+
+	                	}
+
+	                	else{
+
+	                	bouncyball.setTranslateY(bouncyball.getTranslateY()-4);
+
+	                	}
+
+	                	if(XD){
+
+	                	bouncyball.setTranslateX(bouncyball.getTranslateX()+4);
+
+	                	}
+
+	                	else{
+
+	                	bouncyball.setTranslateX(bouncyball.getTranslateX()-4);
+
+	                	}
+
+	                	if(ZD){
+
+	                	bouncyball.setTranslateZ(bouncyball.getTranslateZ()+4);
+
+	                	bouncyball.setRotate(bouncyball.getRotate()-5);
+
+	                	}
+
+	                	else{
+
+	                	bouncyball.setTranslateZ(bouncyball.getTranslateZ()-5);
+
+	                	bouncyball.setRotate(bouncyball.getRotate()+5);
+
+	                	}
+
+	                	break;
+
+
 
 					// Exit the Application
 					case ESCAPE:
@@ -653,22 +763,13 @@ public class Main extends Application {
 		    
 		    rugMaterial.setDiffuseMap(rugPic);
 		    rug.setMaterial(rugMaterial);
+		    
+		    PhongMaterial bballMaterial = new PhongMaterial();
 
-			// Light
-			// PointLight pointLight = new PointLight(Color.WHITE);
-			// pointLight.setTranslateX(centerX);
-			// pointLight.setTranslateY(centerY);
-			// pointLight.setTranslateZ(-200);
-			//
-			// PointLight pointLightback = new PointLight(Color.WHITE);
-			// pointLightback.setTranslateX(centerX);
-			// pointLightback.setTranslateY(centerY);
-			// pointLightback.setTranslateZ(400);
-			//
-			// PointLight pointLightLeft = new PointLight(Color.BLUE);
-			// pointLightLeft.setTranslateX(centerX-500);
-			// pointLightLeft.setTranslateY(centerY);
-			// //pointLightLeft.setTranslateZ(-200);
+		    bballMaterial.setDiffuseMap(bball);
+
+		    bouncyball.setMaterial(bballMaterial);
+
 
 			AmbientLight ambLightRight = new AmbientLight(Color.WHITE);
 
@@ -683,7 +784,7 @@ public class Main extends Application {
 					chairLeg21, chairLeg22, chairLeg23, chairLeg24, chairTop2, chairTop24, rug,
 					hallTableLeg1, hallTableLeg2, hallTableLeg3, hallTableLeg4,	hallTableTop1,
 					hallTableTop2, mirror, outerLeftFrontWall, outerRightFrontWall, grass1, 
-					grass2, camera, ambLightRight);
+					grass2, bouncyball, camera, ambLightRight);
 
 			// Showing the stage
 			primaryStage.show();
