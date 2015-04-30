@@ -1,12 +1,14 @@
 package application;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -39,8 +41,13 @@ public class Main extends Application {
 	Rotate rotateX, rotateY, rotateZ;
 	Timeline timeline, timeline2, timeline3;
 
+	PerspectiveCamera camera = new PerspectiveCamera(true);
+	
+	boolean isPressed, isPressedA;
+
 	double centerX;
 	double centerY;
+	double centerZ;
 
 	// Variables for the earth sphere
 	double MAP_WIDTH = 8192 / 2d;
@@ -54,6 +61,18 @@ public class Main extends Application {
 	Image soccer = new Image("/application/resources/soccer1.jpg");
 	Image soccerSpec = new Image("/application/resources/soccerSpecMap.jpg");
 	Image cylinderPic = new Image("/application/resources/cylinder.jpg");
+	
+	Image hedgePic = new Image("/application/resources/hedge.jpg");
+	Image tablePic = new Image("/application/resources/tablePic.jpg");
+	Image couchPic = new Image("/application/resources/couchPic.jpg");
+	Image cushionPic = new Image("/application/resources/cushionPic.jpg");
+	Image pavementPic = new Image("/application/resources/pavementPic.jpg");
+	Image chairPic = new Image("/application/resources/chairPic.jpg");
+	Image rugPic = new Image("/application/resources/rugPic.jpg");
+	Image mirrorPic = new Image("/application/resources/mirrorPic.jpg");
+	Image mahoganyPic = new Image("/application/resources/mahoganyPic.jpg");
+	Image marblePic = new Image("/application/resources/marblePic.jpg");
+	Image grassPic = new Image("/application/resources/grassPic.jpg");
 	
 	String earthDiff = "/application/resources/EarthDiff.jpg";
 	String earthSpec = "/application/resources/EarthSpec.jpg";
@@ -71,7 +90,7 @@ public class Main extends Application {
 			primaryStage.initStyle(StageStyle.UNDECORATED);
 
 			// Camera
-			PerspectiveCamera camera = new PerspectiveCamera(true);
+			
 			// camera.getTransforms().addAll(
 			// rotateY = new Rotate(25, Rotate.Y_AXIS),
 			// rotateX = new Rotate(-15, Rotate.X_AXIS),
@@ -110,6 +129,48 @@ public class Main extends Application {
 			Cylinder cylinder = new Cylinder(20, 10);
 			//Line intersecting the globe
 			Line lineEarth = new Line(centerX - 210, centerY+50, centerX - 210, centerY-50);
+			//Hannah
+			Box couchBox1 = new Box(10, 30, 90);
+			Box couchBox2 = new Box(40, 20, 90);
+			Cylinder couchCylinder1 = new Cylinder(5, 30);
+			Cylinder couchCylinder2 = new Cylinder(5, 30);
+			Box cushion1 = new Box(3,20,20);
+			Box cushion2 = new Box(3,20,20);
+			Box mirror = new Box(1, 40, 30);
+			Cylinder hallTableLeg1 = new Cylinder(1.5, 30);
+			Cylinder hallTableLeg2 = new Cylinder(1.5, 30);
+			Cylinder hallTableLeg3 = new Cylinder(1.5, 30);
+			Cylinder hallTableLeg4 = new Cylinder(1.5, 30);
+			Box hallTableTop1 = new Box(25, 5, 50);
+			Box hallTableTop2 = new Box(29, 2, 54);
+			Box outerRightFrontWall = new Box(230, 100, 0.1);
+			Box outerLeftFrontWall = new Box(230, 100, 0.1);				
+			Box hedge1 = new Box(100, 30, 30);
+			Box hedge2 = new Box(100, 30, 30);
+			Box hedge3 = new Box(100, 30, 30);
+			Box hedge4 = new Box(160, 30, 30);
+			Cylinder tableLeg1 = new Cylinder(2, 30);
+			Cylinder tableLeg2 = new Cylinder(2, 30);
+			Cylinder tableLeg3 = new Cylinder(2, 30);
+			Cylinder tableLeg4 = new Cylinder(2, 30);
+			Box tableTop = new Box(60, 3, 30);
+			Cylinder chairLeg1 = new Cylinder(1.5, 20);
+			Cylinder chairLeg2 = new Cylinder(1.5, 20);
+			Cylinder chairLeg3 = new Cylinder(1.5, 20);
+			Cylinder chairLeg4 = new Cylinder(1.5, 20);
+			Box chairTop = new Box(20, 2, 20);
+			Box chairTop4 = new Box(2,25,20);
+			Cylinder chairLeg21 = new Cylinder(1.5, 20);
+			Cylinder chairLeg22 = new Cylinder(1.5, 20);
+			Cylinder chairLeg23 = new Cylinder(1.5, 20);
+			Cylinder chairLeg24 = new Cylinder(1.5, 20);
+			Box chairTop2 = new Box(20, 2, 20);
+			Box chairTop24 = new Box(2,25,20);
+			Box path = new Box(100,1,300);
+			Box rug = new Box(100, 0.1, 200);
+			Box grass1 = new Box(260,1,240);
+			Box grass2 = new Box(260, 1, 260);
+//	Hannah
 			
 			box.setTranslateX(centerX);
 			box.setTranslateY(centerY);
@@ -192,6 +253,150 @@ public class Main extends Application {
 			cylinder.setTranslateY(centerY+44);
 			cylinder.setTranslateZ(280);
 			
+			//Hannah
+			hedge1.setTranslateX(centerX);
+			hedge1.setTranslateY(centerY+40);
+			hedge1.setTranslateZ(30);
+			
+			hedge2.setTranslateX(centerX+300);	
+			hedge2.setTranslateY(centerY+40);
+			hedge2.setTranslateZ(30);		
+			
+			hedge3.setTranslateX(centerX+200);		
+			hedge3.setTranslateY(centerY+40);
+			hedge3.setTranslateZ(30);
+
+			hedge4.setTranslateX(centerX-130);
+			hedge4.setTranslateY(centerY+40);
+			hedge4.setTranslateZ(110);
+			
+			tableLeg1.setTranslateY(centerY+40);
+			tableLeg1.setTranslateZ(800);
+			tableLeg2.setTranslateY(centerY+40);
+			tableLeg2.setTranslateZ(780);
+			tableLeg3.setTranslateY(centerY+40);
+			tableLeg3.setTranslateX(centerX+40);
+			tableLeg3.setTranslateZ(800);
+			tableLeg4.setTranslateX(centerX+40);
+			tableLeg4.setTranslateY(centerY+40);
+			tableLeg4.setTranslateZ(780);
+
+			chairLeg1.setTranslateX(centerX+55);
+			chairLeg1.setTranslateY(centerY+45);
+			chairLeg1.setTranslateZ(797);
+			chairLeg2.setTranslateX(centerX+55);
+			chairLeg2.setTranslateY(centerY+45);
+			chairLeg2.setTranslateZ(783);
+			chairLeg3.setTranslateX(centerX+70);
+			chairLeg3.setTranslateY(centerY+45);
+			chairLeg3.setTranslateZ(797);
+			chairLeg4.setTranslateX(centerX+70);
+			chairLeg4.setTranslateY(centerY+45);
+			chairLeg4.setTranslateZ(783);
+			
+			chairTop.setTranslateX(centerX+62);
+			chairTop.setTranslateY(centerY+35);
+			chairTop.setTranslateZ(790);
+			chairTop4.setTranslateX(centerX+72);
+			chairTop4.setTranslateY(centerY+23);
+			chairTop4.setTranslateZ(790);
+			chairTop4.getTransforms().add(new Rotate(10,0,0));
+			
+			chairLeg21.setTranslateX(centerX-30);
+			chairLeg21.setTranslateY(centerY+45);
+			chairLeg21.setTranslateZ(797);
+			chairLeg22.setTranslateX(centerX-30);
+			chairLeg22.setTranslateY(centerY+45);
+			chairLeg22.setTranslateZ(783);
+			chairLeg23.setTranslateX(centerX-15);
+			chairLeg23.setTranslateY(centerY+45);
+			chairLeg23.setTranslateZ(797);
+			chairLeg24.setTranslateX(centerX-15);
+			chairLeg24.setTranslateY(centerY+45);
+			chairLeg24.setTranslateZ(783);
+			
+			chairTop2.setTranslateX(centerX-23);
+			chairTop2.setTranslateY(centerY+35);
+			chairTop2.setTranslateZ(790);
+			chairTop24.setTranslateX(centerX-33);
+			chairTop24.setTranslateY(centerY+23);
+			chairTop24.setTranslateZ(790);
+			chairTop24.getTransforms().add(new Rotate(-10,0,0));
+			
+			tableTop.setTranslateX(centerX+20);
+			tableTop.setTranslateY(centerY+24);
+			tableTop.setTranslateZ(790);
+			
+			couchBox1.setTranslateX(centerX-266);
+			couchBox1.setTranslateY(centerY+15);
+			couchBox1.setTranslateZ(435);
+			couchBox1.getTransforms().add(new Rotate(-10,0,0));
+			couchBox2.setTranslateX(centerX-250);
+			couchBox2.setTranslateY(centerY+40);
+			couchBox2.setTranslateZ(435);
+			
+			couchCylinder1.setTranslateX(centerX-245);
+			couchCylinder1.setTranslateY(centerY+25);
+			couchCylinder1.setTranslateZ(395);
+			couchCylinder1.getTransforms().add(new Rotate(90,0,0));
+			couchCylinder2.setTranslateX(centerX-245);
+			couchCylinder2.setTranslateY(centerY+25);
+			couchCylinder2.setTranslateZ(475);
+			couchCylinder2.getTransforms().add(new Rotate(90,0,0));
+			
+			cushion1.setTranslateX(centerX-257);
+			cushion1.setTranslateY(centerY+22);
+			cushion1.setTranslateZ(415);
+			cushion1.getTransforms().add(new Rotate(-10,0,0));
+
+			cushion2.setTranslateX(centerX-257);
+			cushion2.setTranslateY(centerY+22);
+			cushion2.setTranslateZ(455);
+			cushion2.getTransforms().add(new Rotate(-10,0,0));
+						
+			path.setTranslateX(centerX + 100);
+			path.setTranslateY(centerY+50);
+			path.setTranslateZ(-5);
+			grass1.setTranslateX(centerX+280);
+			grass1.setTranslateY(centerY+50);
+			grass1.setTranslateZ(-35);
+			grass2.setTranslateX(centerX-80);
+			grass2.setTranslateY(centerY+50);
+			grass2.setTranslateZ(-20);
+			
+			rug.setTranslateX(centerX + 350);
+			rug.setTranslateY(centerY + 45);
+			rug.setTranslateZ(350);
+			
+			mirror.setTranslateY(centerY-5);
+			mirror.setTranslateZ(335);
+			mirror.getTransforms().add(new Rotate(-10,0,0));
+			
+			hallTableLeg1.setTranslateX(centerX+23);
+			hallTableLeg1.setTranslateY(centerY+35);
+			hallTableLeg1.setTranslateZ(312);
+			hallTableLeg2.setTranslateX(centerX+2);
+			hallTableLeg2.setTranslateY(centerY+35);
+			hallTableLeg2.setTranslateZ(312);
+			hallTableLeg3.setTranslateX(centerX+23);
+			hallTableLeg3.setTranslateY(centerY+35);
+			hallTableLeg3.setTranslateZ(358);
+			hallTableLeg4.setTranslateX(centerX+2);
+			hallTableLeg4.setTranslateY(centerY+35);
+			hallTableLeg4.setTranslateZ(358);			
+			hallTableTop1.setTranslateX(centerX+12);
+			hallTableTop1.setTranslateY(centerY+20);
+			hallTableTop1.setTranslateZ(335);
+			hallTableTop2.setTranslateX(centerX+13);
+			hallTableTop2.setTranslateY(centerY+16);
+			hallTableTop2.setTranslateZ(335);
+			
+			outerLeftFrontWall.setTranslateZ(129);
+			outerLeftFrontWall.setTranslateX(centerX-170);
+			
+			outerRightFrontWall.setTranslateX(centerX+340);
+			outerRightFrontWall.setTranslateZ(49);
+			//Hannah
 
 			
 			
@@ -205,67 +410,50 @@ public class Main extends Application {
 						camera.getTransforms()
 								.addAll(translate = new Translate(centerX,
 										centerY, -10));
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ translate.toString());
 						break;
 
 					case W:
 						camera.getTransforms()
-								.addAll(translate = new Translate(centerX,
-										centerY, 10));
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ translate.toString());
-
+						.addAll(translate = new Translate(centerX,
+								centerY, 10));
 						break;
 					// Rotation around Y Axis
 					case LEFT:
 						// door.getTransforms().add(new Rotate(5, centerX+50, 0,
 						// 0, Rotate.Y_AXIS));
-						System.out.println("Key Pressed: " + ke.getCode());
 						break;
 
 					case RIGHT:
 						 soccerBall.getTransforms().add(new Rotate(-5,
 						 Rotate.Y_AXIS));
-						System.out.println("Key Pressed: " + ke.getCode());
 						break;
 					// Camera rotation around Z Axis
 					case NUMPAD1:
 						rotateZ = new Rotate(-1, Rotate.Z_AXIS);
 						camera.getTransforms().add(rotateZ);
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ rotateZ);
 						break;
 
 					case NUMPAD3:
 						rotateZ = new Rotate(1, Rotate.Z_AXIS);
 						camera.getTransforms().add(rotateZ);
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ rotateZ);
 						break;
 					// Camera rotation Y Axis
 					case A:
-						rotateY = new Rotate(-3, Rotate.Y_AXIS);
+						rotateY = new Rotate(-1.4, Rotate.Y_AXIS);
 						camera.getTransforms().add(rotateY);
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ rotateY);
 						break;
 
 					case D:
-						rotateY = new Rotate(3, Rotate.Y_AXIS);
+						rotateY = new Rotate(1.4, Rotate.Y_AXIS);
 						camera.getTransforms().add(rotateY);
-						System.out.println("Key Pressed: " + ke.getCode()
-								+ rotateY);
 						break;
 					// Rotate around X Axis
 					case UP:
 						box.getTransforms().add(new Rotate(-5, Rotate.X_AXIS));
-						System.out.println("Key Pressed: " + ke.getCode());
 						break;
 
 					case DOWN:
 						box.getTransforms().add(new Rotate(5, Rotate.X_AXIS));
-						System.out.println("Key Pressed: " + ke.getCode());
 						break;
 						//opens the door
 					case P:
@@ -275,7 +463,6 @@ public class Main extends Application {
 										Rotate.Y_AXIS))));
 						timeline.setCycleCount(88);
 						timeline.play();
-						System.out.println(timeline.getCycleCount());
 						break;
 						//starts spinning the globe indefinitely
 					case O:
@@ -306,8 +493,22 @@ public class Main extends Application {
 						timeline3.setCycleCount(9);
 						timeline3.setDelay(Duration.millis(860));
 						timeline3.play();
-						System.out.println(cylinder.getTranslateY());
 						break;
+						// Strafing Left
+	                case Q:
+	                	camera.getTransforms().addAll(
+	                				translate = new Translate(-10, centerY, centerZ)
+	                			);
+	                		System.out.println("Key Presed: " + ke.getCode() + translate.toString());
+	            	break;
+	            	
+	            	// Strafing Right
+	                case E:
+	                	camera.getTransforms().addAll(
+	                				translate = new Translate(10, centerY, centerZ)
+	                			);
+	                		System.out.println("Key Presed: " + ke.getCode() + translate.toString());
+	            	break;
 
 					// Exit the Application
 					case ESCAPE:
@@ -317,7 +518,9 @@ public class Main extends Application {
 					}
 				}
 			});
-
+			
+			
+			
 			// Color and phong material of the box
 			PhongMaterial phong = new PhongMaterial();
 			PhongMaterial floorMaterial = new PhongMaterial();
@@ -327,6 +530,18 @@ public class Main extends Application {
 			PhongMaterial soccerBallMaterial = new PhongMaterial();
 			PhongMaterial earthMaterial = new PhongMaterial();
 			PhongMaterial cylinderMaterial = new PhongMaterial();
+			PhongMaterial hedgeMaterial = new PhongMaterial();
+			PhongMaterial tableMaterial = new PhongMaterial();
+			PhongMaterial couchMaterial = new PhongMaterial();
+			PhongMaterial cushionMaterial = new PhongMaterial();
+			PhongMaterial pathMaterial = new PhongMaterial();
+			PhongMaterial chairMaterial = new PhongMaterial();
+			PhongMaterial rugMaterial = new PhongMaterial();
+			PhongMaterial mirrorMaterial = new PhongMaterial();
+			PhongMaterial mahoganyMaterial = new PhongMaterial();
+			PhongMaterial marbleMaterial = new PhongMaterial();
+			PhongMaterial grassMaterial = new PhongMaterial();
+
 			// phong.setDiffuseColor(Color.GREEN);
 			phong.setSpecularColor(Color.WHITE);
 			phong.setDiffuseMap(brick);
@@ -376,6 +591,68 @@ public class Main extends Application {
 			
 			cylinderMaterial.setDiffuseMap(cylinderPic);
 			cylinder.setMaterial(cylinderMaterial);
+			
+			hedgeMaterial.setDiffuseMap(hedgePic);
+		    hedge1.setMaterial(hedgeMaterial);
+		    hedge2.setMaterial(hedgeMaterial);
+		    hedge3.setMaterial(hedgeMaterial);
+		    hedge4.setMaterial(hedgeMaterial);
+		    
+		    grassMaterial.setDiffuseMap(grassPic);
+		    grass1.setMaterial(grassMaterial);
+		    grass2.setMaterial(grassMaterial);
+		    
+		    tableMaterial.setDiffuseMap(tablePic);
+		    tableLeg1.setMaterial(tableMaterial);
+		    tableLeg2.setMaterial(tableMaterial);
+		    tableLeg3.setMaterial(tableMaterial);
+		    tableLeg4.setMaterial(tableMaterial);
+		    tableTop.setMaterial(tableMaterial);
+		    
+		    chairMaterial.setDiffuseMap(chairPic);
+		    chairLeg1.setMaterial(chairMaterial);
+		    chairLeg2.setMaterial(chairMaterial);
+		    chairLeg3.setMaterial(chairMaterial);
+		    chairLeg4.setMaterial(chairMaterial);
+		    chairTop.setMaterial(chairMaterial);
+		    chairTop4.setMaterial(chairMaterial);
+		    chairLeg21.setMaterial(chairMaterial);
+		    chairLeg22.setMaterial(chairMaterial);
+		    chairLeg23.setMaterial(chairMaterial);
+		    chairLeg24.setMaterial(chairMaterial);
+		    chairTop2.setMaterial(chairMaterial);
+		    chairTop24.setMaterial(chairMaterial);
+		    
+		    mirrorMaterial.setDiffuseMap(mirrorPic);
+			mirror.setMaterial(mirrorMaterial);
+			
+			couchMaterial.setDiffuseMap(couchPic);
+			couchBox1.setMaterial(couchMaterial);
+			couchBox2.setMaterial(couchMaterial);
+			couchCylinder1.setMaterial(couchMaterial);
+			couchCylinder2.setMaterial(couchMaterial);
+			
+			cushionMaterial.setDiffuseMap(cushionPic);
+			cushion1.setMaterial(cushionMaterial);
+			cushion2.setMaterial(cushionMaterial);
+			
+			pathMaterial.setDiffuseMap(pavementPic);
+			path.setMaterial(pathMaterial);
+		    
+		    outerLeftFrontWall.setMaterial(phong);
+		    outerRightFrontWall.setMaterial(phong);
+			
+		    mahoganyMaterial.setDiffuseMap(mahoganyPic);
+		    hallTableLeg1.setMaterial(mahoganyMaterial);
+		    hallTableLeg2.setMaterial(mahoganyMaterial);
+		    hallTableLeg3.setMaterial(mahoganyMaterial);
+		    hallTableLeg4.setMaterial(mahoganyMaterial);
+		    hallTableTop1.setMaterial(mahoganyMaterial);
+		    marbleMaterial.setDiffuseMap(marblePic);
+		    hallTableTop2.setMaterial(marbleMaterial);
+		    
+		    rugMaterial.setDiffuseMap(rugPic);
+		    rug.setMaterial(rugMaterial);
 
 			// Light
 			// PointLight pointLight = new PointLight(Color.WHITE);
@@ -399,8 +676,14 @@ public class Main extends Application {
 			group.getChildren().addAll(box, box2, box3, box4, backwall,
 					leftwall, rightwall, leftcornerwall, rightcornerwall,
 					leftfrontwall, rightfrontwall, ceiling, floor, floor2,
-					floor3, floor4, door, soccerBall, earth, lineEarth, cylinder, camera,
-					ambLightRight);
+					floor3, floor4, door, soccerBall, earth, lineEarth, cylinder,hedge1,
+					hedge2, hedge3, hedge4, tableLeg1, tableLeg2, tableLeg3, tableLeg4, tableTop,
+					couchBox1, couchBox2, couchCylinder1, couchCylinder2, cushion1, cushion2,
+					chairLeg1, chairLeg2, chairLeg3, chairLeg4, chairTop, path, chairTop4,
+					chairLeg21, chairLeg22, chairLeg23, chairLeg24, chairTop2, chairTop24, rug,
+					hallTableLeg1, hallTableLeg2, hallTableLeg3, hallTableLeg4,	hallTableTop1,
+					hallTableTop2, mirror, outerLeftFrontWall, outerRightFrontWall, grass1, 
+					grass2, camera, ambLightRight);
 
 			// Showing the stage
 			primaryStage.show();
